@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIKMAT 365 - Renungan Harian Pemuda Kristen 2026</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sand: {
+                            50: '#fdfbf7',
+                            100: '#f7f2ea',
+                            200: '#eee3d3',
+                            300: '#e2d3bf',
+                            700: '#6b5c4d',
+                            800: '#4a3f35',
+                            900: '#2c241d',
+                            950: '#1a1410'
+                        },
+                        sage: {
+                            100: '#eef4f0',
+                            200: '#d7e4dc',
+                            500: '#5a826b',
+                            600: '#486b57',
+                            700: '#385443',
+                            800: '#283d30',
+                            900: '#1b2a21'
+                        },
+                        amberCustom: '#d97706',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 280px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-sand-50 dark:bg-stone-950 text-sand-900 dark:text-stone-100 font-sans antialiased min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white dark:bg-stone-900 border-b border-sand-200 dark:border-stone-800 sticky top-0 z-50 transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-sage-700 dark:bg-sage-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                        📖
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight text-sand-900 dark:text-stone-100">HIKMAT 365</h1>
+                        <p class="text-xs text-stone-500 dark:text-stone-400">Renungan Harian Pemuda 2026 • Kitab Amsal</p>
+                    </div>
+                </div>
+
+                <!-- Nav Buttons -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <button onclick="switchTab('daily')" id="nav-daily" class="px-3 py-2 rounded-lg text-sm font-medium bg-sage-500 text-white transition-all">Hari Ini</button>
+                    <button onclick="switchTab('calendar')" id="nav-calendar" class="px-3 py-2 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-sand-100 dark:hover:bg-stone-800 transition-all">Kalender 365 Hari</button>
+                    <button onclick="switchTab('topics')" id="nav-topics" class="px-3 py-2 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-sand-100 dark:hover:bg-stone-800 transition-all">Indeks Topik</button>
+                    <button onclick="switchTab('progress')" id="nav-progress" class="px-3 py-2 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-sand-100 dark:hover:bg-stone-800 transition-all">Progress & Grafik</button>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <!-- Streak Counter -->
+                    <div class="flex items-center gap-2 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 text-amber-800 dark:text-amber-300 px-3 py-1.5 rounded-full text-xs font-semibold">
+                        <span>🔥 Streak:</span>
+                        <span id="streak-count" class="text-amber-700 dark:text-amber-400 font-bold">1 Hari</span>
+                    </div>
+
+                    <!-- Dark Mode Toggle Button -->
+                    <button onclick="toggleDarkMode()" id="theme-toggle-btn" class="p-2 rounded-xl bg-sand-100 dark:bg-stone-800 text-stone-700 dark:text-amber-400 hover:bg-sand-200 dark:hover:bg-stone-700 transition-all flex items-center justify-center text-sm font-semibold" title="Ganti Mode Gelap/Terang">
+                        <span id="theme-toggle-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div class="md:hidden flex border-t border-sand-200 dark:border-stone-800 overflow-x-auto hide-scrollbar px-2 py-1 bg-sand-100 dark:bg-stone-900 text-xs">
+            <button onclick="switchTab('daily')" id="mob-daily" class="px-3 py-1.5 rounded-md whitespace-nowrap font-medium bg-sage-500 text-white mr-1">Hari Ini</button>
+            <button onclick="switchTab('calendar')" id="mob-calendar" class="px-3 py-1.5 rounded-md whitespace-nowrap font-medium text-stone-700 dark:text-stone-300 mr-1">Kalender</button>
+            <button onclick="switchTab('topics')" id="mob-topics" class="px-3 py-1.5 rounded-md whitespace-nowrap font-medium text-stone-700 dark:text-stone-300 mr-1">Topik</button>
+            <button onclick="switchTab('progress')" id="mob-progress" class="px-3 py-1.5 rounded-md whitespace-nowrap font-medium text-stone-700 dark:text-stone-300">Progress</button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- TAB 1: DAILY DEVOTIONAL READER -->
+        <section id="tab-daily" class="space-y-6">
+            <!-- Introductory Callout -->
+            <div class="bg-stone-800 dark:bg-stone-900 text-white rounded-2xl p-6 shadow-md relative overflow-hidden border border-stone-700">
+                <div class="relative z-10">
+                    <div class="inline-block px-2.5 py-1 rounded-md bg-sage-500 text-white text-xs font-semibold mb-2">
+                        Kurikulum 365 Hari • Kitab Amsal
+                    </div>
+                    <h2 class="text-2xl font-bold">Refleksi Hikmat Hari Ini</h2>
+                    <p class="text-stone-300 text-sm mt-1 max-w-2xl">
+                        Aplikasi ini dirancang untuk mendampingi perjalanan rohanimu sepanjang tahun 2026 dengan hikmat praktis Amsal yang relevan untuk isu Gen Z & Milenial.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Date Navigator Bar -->
+            <div class="bg-white dark:bg-stone-900 p-4 rounded-xl border border-sand-200 dark:border-stone-800 flex flex-wrap items-center justify-between gap-3 shadow-sm transition-colors duration-300">
+                <div class="flex items-center gap-2">
+                    <button onclick="navigateDay(-1)" class="p-2 rounded-lg bg-sand-100 dark:bg-stone-800 hover:bg-sand-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-sm font-semibold transition-all">
+                        ◀ Hari Sebelumnya
+                    </button>
+                    <button onclick="jumpToToday()" class="p-2 rounded-lg bg-sage-100 dark:bg-sage-950/80 hover:bg-sage-200 dark:hover:bg-sage-900 text-sage-700 dark:text-sage-300 text-sm font-semibold transition-all">
+                        📍 Hari Ini
+                    </button>
+                    <button onclick="navigateDay(1)" class="p-2 rounded-lg bg-sand-100 dark:bg-stone-800 hover:bg-sand-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-sm font-semibold transition-all">
+                        Hari Berikutnya ▶
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <label for="date-select" class="text-xs font-semibold text-stone-500 dark:text-stone-400">Pilih Tanggal:</label>
+                    <input type="date" id="date-select" min="2026-01-01" max="2026-12-31" value="2026-01-01" onchange="onDateInputChange(this.value)" class="bg-sand-50 dark:bg-stone-800 border border-sand-200 dark:border-stone-700 text-stone-800 dark:text-stone-100 text-sm rounded-lg p-2 focus:ring-sage-500 focus:border-sage-500">
+                </div>
+            </div>
+
+            <!-- Main Devotional Card -->
+            <div id="devotional-card" class="bg-white dark:bg-stone-900 border border-sand-200 dark:border-stone-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6 transition-colors duration-300">
+                <!-- Devotional Header -->
+                <div class="border-b border-sand-100 dark:border-stone-800 pb-4 flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <span id="dev-month-theme" class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2.5 py-1 rounded-md border border-amber-200 dark:border-amber-800/60">
+                            TEMA BULANAN
+                        </span>
+                        <h2 id="dev-date" class="text-sm font-semibold text-stone-500 dark:text-stone-400 mt-2">1 Januari 2026</h2>
+                        <h3 id="dev-title" class="text-2xl sm:text-3xl font-extrabold text-sand-900 dark:text-stone-100 mt-1">
+                            Mulai dari Langkah Pertama yang Bener
+                        </h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="dev-category" class="px-3 py-1 rounded-full bg-sage-100 dark:bg-sage-950/80 text-sage-700 dark:text-sage-300 text-xs font-bold border border-sage-200 dark:border-sage-800">
+                            #Purpose
+                        </span>
+                        <button onclick="toggleBookmarkCurrent()" id="btn-bookmark" class="p-2 rounded-lg border border-sand-200 dark:border-stone-700 hover:bg-sand-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 text-sm transition-all">
+                            ⭐ Simpan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scripture Box -->
+                <div class="bg-sand-100 dark:bg-stone-800/70 border-l-4 border-sage-500 p-4 sm:p-5 rounded-r-xl">
+                    <p id="dev-verse-text" class="text-base sm:text-lg font-medium text-sand-900 dark:text-stone-100 italic">
+                        "Takut akan TUHAN adalah permulaan pengetahuan, tetapi orang bodoh menghina hikmat dan didikan."
+                    </p>
+                    <p id="dev-verse-ref" class="text-xs font-bold text-sage-700 dark:text-sage-400 mt-2 uppercase tracking-wide">
+                        — Amsal 1:7
+                    </p>
+                </div>
+
+                <!-- Insight Section -->
+                <div>
+                    <h4 class="text-xs font-bold text-stone-400 dark:text-stone-500 uppercase tracking-wider mb-2">💡 INSIGHT BIBLE</h4>
+                    <p id="dev-insight" class="text-stone-700 dark:text-stone-300 leading-relaxed text-sm sm:text-base">
+                        Awal tahun biasanya identik dengan resolusi baru. Salomo, orang paling pintar dan kaya di zamannya, ngasih bocoran "cheat code" buat jalani hidup: semuanya harus dimulai dari rasa hormat dan takjub (takut) akan Tuhan. Pengetahuan (skill, IPK tinggi, gelar) tanpa hikmat dari Tuhan cuma bakal bikin kita pinter tapi gampang nyasar.
+                    </p>
+                </div>
+
+                <!-- Real Talk Section -->
+                <div class="bg-stone-50 dark:bg-stone-800/50 p-5 rounded-xl border border-stone-200 dark:border-stone-800">
+                    <h4 class="text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider mb-2">🔥 REAL TALK UNTUK PEMUDA</h4>
+                    <p id="dev-realtalk" class="text-stone-700 dark:text-stone-300 leading-relaxed text-sm sm:text-base">
+                        Pasti hari ini timeline kamu penuh dengan rangkuman pencapaian orang lain di 2025 dan target ambisius mereka di 2026. Bikin resolusi itu bagus, tapi sadar nggak sih kadang kita nyusun rencana hidup tanpa ngajak Tuhan ngobrol sama sekali? Kita sibuk ngejar karir, jodoh, atau pengakuan, tapi lupa sama fondasinya.
+                    </p>
+                </div>
+
+                <!-- Challenge & Prayer Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <!-- Challenge Box -->
+                    <div class="bg-amber-50/60 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 p-5 rounded-xl flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold text-amber-900 dark:text-amber-400 uppercase tracking-wider mb-2">🎯 TANTANGAN HARI INI</h4>
+                            <p id="dev-challenge" class="text-stone-800 dark:text-stone-200 text-sm leading-relaxed">
+                                Tulis 1-3 target utamamu tahun ini, lalu bawa dalam doa. Minta Tuhan coret rencana yang bukan kehendak-Nya.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-amber-200/60 dark:border-amber-900/60 flex items-center justify-between">
+                            <span class="text-xs font-medium text-amber-800 dark:text-amber-300">Status Penyelesaian:</span>
+                            <button onclick="toggleChallengeComplete()" id="btn-challenge-status" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-stone-800 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-all">
+                                ⚪ Belum Selesai
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Prayer Box -->
+                    <div class="bg-sage-100/60 dark:bg-sage-950/40 border border-sage-200 dark:border-sage-900/60 p-5 rounded-xl flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold text-sage-900 dark:text-sage-300 uppercase tracking-wider mb-2">🙏 DOA SINGKAT</h4>
+                            <p id="dev-prayer" class="text-stone-800 dark:text-stone-200 text-sm italic leading-relaxed">
+                                "Tuhan, terima kasih buat tahun yang baru. Jadikan aku pribadi yang lebih mengutamakan Engkau di atas segala rencanaku. Bimbing langkahku di 2026 ini. Amin."
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-sage-200 dark:border-sage-900/60 flex justify-end">
+                            <button onclick="copyPrayer()" class="text-xs font-semibold text-sage-700 dark:text-sage-300 hover:text-sage-900 dark:hover:text-white transition-colors">
+                                📋 Salin Doa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reflection Note Section -->
+                <div class="border-t border-sand-200 dark:border-stone-800 pt-5">
+                    <h4 class="text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-2">✍️ JURNAL REFLEKSI PRIBADI</h4>
+                    <textarea id="dev-journal-input" placeholder="Tuliskan perenunganmu, kesan, atau doa pribadimu terkait renungan hari ini..." class="w-full p-3 bg-sand-50 dark:bg-stone-800 border border-sand-200 dark:border-stone-700 text-stone-800 dark:text-stone-100 rounded-xl text-sm focus:ring-sage-500 focus:border-sage-500 min-h-[90px]"></textarea>
+                    <div class="flex justify-end mt-2">
+                        <button onclick="saveJournalNote()" class="px-4 py-2 bg-sage-700 hover:bg-sage-800 text-white text-xs font-bold rounded-lg shadow-sm transition-all">
+                            💾 Simpan Catatan Jurnal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: 365-DAY CALENDAR MATRIX -->
+        <section id="tab-calendar" class="space-y-6 hidden">
+            <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-sand-200 dark:border-stone-800 shadow-sm space-y-4 transition-colors duration-300">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-sand-900 dark:text-stone-100">Kalender Renungan 365 Hari (2026)</h2>
+                        <p class="text-xs text-stone-500 dark:text-stone-400">Pilih bulan dan tanggal untuk membuka renungan spesifik.</p>
+                    </div>
+
+                    <!-- Month Selector Dropdown -->
+                    <select id="month-filter-select" onchange="renderCalendarGrid(parseInt(this.value))" class="bg-sand-50 dark:bg-stone-800 border border-sand-200 dark:border-stone-700 text-stone-800 dark:text-stone-100 text-sm rounded-lg p-2 font-semibold focus:ring-sage-500 focus:border-sage-500">
+                        <option value="0">Januari - Fondasi & Visi Hidup</option>
+                        <option value="1">Februari - Circle & Pertemanan Sejati</option>
+                        <option value="2">Maret - Karir, Kuliah & Hustle Culture</option>
+                        <option value="3">April - Integritas & Kemurnian</option>
+                        <option value="4">Mei - Hikmat Keuangan & Pengelolaan</option>
+                        <option value="5">Juni - Emosi & Kesehatan Mental</option>
+                        <option value="6">Juli - Cinta, Asmara & Pacaran</option>
+                        <option value="7">Agustus - Perkataan & Komunikasi Bijak</option>
+                        <option value="8">September - Kepemimpinan & Karakter</option>
+                        <option value="9">Oktober - Penguasaan Diri & Disiplin</option>
+                        <option value="10">November - Ucapan Syukur & Keluarga</option>
+                        <option value="11">Desember - Refleksi & Warisan Hikmat</option>
+                    </select>
+                </div>
+
+                <!-- Active Month Theme Header Card -->
+                <div id="active-month-banner" class="bg-sand-100 dark:bg-stone-800 p-4 rounded-xl border border-sand-200 dark:border-stone-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase">FOKUS TEMA BULAN INI</span>
+                        <h3 id="month-banner-title" class="text-lg font-bold text-sand-900 dark:text-stone-100">Januari: Fondasi & Visi Hidup</h3>
+                        <p id="month-banner-desc" class="text-xs text-stone-600 dark:text-stone-300 mt-0.5">Membangun awal tahun dengan menyelaraskan kehendak diri dengan hikmat Allah dari Amsal 1-4.</p>
+                    </div>
+                    <span id="month-badge-days" class="text-xs font-bold px-3 py-1 bg-white dark:bg-stone-900 border border-sand-200 dark:border-stone-700 rounded-full text-stone-700 dark:text-stone-300">31 Hari</span>
+                </div>
+
+                <!-- Calendar Days Grid -->
+                <div id="calendar-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 pt-2">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: TOPICS & INDEX -->
+        <section id="tab-topics" class="space-y-6 hidden">
+            <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-sand-200 dark:border-stone-800 shadow-sm space-y-4 transition-colors duration-300">
+                <div>
+                    <h2 class="text-xl font-bold text-sand-900 dark:text-stone-100">Indeks Topik & Pencarian Renungan</h2>
+                    <p class="text-xs text-stone-500 dark:text-stone-400">Cari renungan berdasarkan kata kunci (misal: "pacar", "skripsi", "gaji", "overthinking") atau kategori.</p>
+                </div>
+
+                <!-- Search & Filter Controls -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="search-input" onkeyup="filterDevotionals()" placeholder="🔍 Cari kata kunci atau judul..." class="flex-1 bg-sand-50 dark:bg-stone-800 border border-sand-200 dark:border-stone-700 text-stone-800 dark:text-stone-100 rounded-xl p-3 text-sm focus:ring-sage-500 focus:border-sage-500">
+                    <select id="category-filter" onchange="filterDevotionals()" class="bg-sand-50 dark:bg-stone-800 border border-sand-200 dark:border-stone-700 text-stone-800 dark:text-stone-100 rounded-xl p-3 text-sm font-semibold focus:ring-sage-500 focus:border-sage-500">
+                        <option value="ALL">Semua Kategori</option>
+                        <option value="Purpose">#Purpose & Visi</option>
+                        <option value="Circle">#Circle & Pertemanan</option>
+                        <option value="Karir">#Karir & Hustle</option>
+                        <option value="Integritas">#Integritas & Kemurnian</option>
+                        <option value="Keuangan">#Keuangan & Finansial</option>
+                        <option value="MentalHealth">#Kesehatan Mental</option>
+                        <option value="Asmara">#Cinta & Asmara</option>
+                        <option value="Komunikasi">#Perkataan & Komunikasi</option>
+                    </select>
+                </div>
+
+                <!-- Results Counter -->
+                <div class="text-xs font-semibold text-stone-500 dark:text-stone-400">
+                    Menampilkan <span id="search-count" class="text-sage-700 dark:text-sage-400 font-bold">0</span> hasil renungan
+                </div>
+
+                <!-- Results List Grid -->
+                <div id="search-results-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamic search results -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: PROGRESS & ANALYTICS -->
+        <section id="tab-progress" class="space-y-6 hidden">
+            <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-sand-200 dark:border-stone-800 shadow-sm space-y-6 transition-colors duration-300">
+                <div>
+                    <h2 class="text-xl font-bold text-sand-900 dark:text-stone-100">Statistik Kebiasaan & Progress 2026</h2>
+                    <p class="text-xs text-stone-500 dark:text-stone-400">Pantau konsistensi membaca renungan dan tantangan harianmu sepanjang tahun.</p>
+                </div>
+
+                <!-- Stats Cards Summary -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-sand-100 dark:bg-stone-800/80 p-4 rounded-xl border border-sand-200 dark:border-stone-700 text-center">
+                        <span class="text-2xl font-bold text-sage-700 dark:text-sage-400" id="stat-completed-count">0</span>
+                        <p class="text-xs font-medium text-stone-600 dark:text-stone-300 mt-1">Renungan Selesai</p>
+                    </div>
+                    <div class="bg-sand-100 dark:bg-stone-800/80 p-4 rounded-xl border border-sand-200 dark:border-stone-700 text-center">
+                        <span class="text-2xl font-bold text-amber-700 dark:text-amber-400" id="stat-streak-display">1 Hari</span>
+                        <p class="text-xs font-medium text-stone-600 dark:text-stone-300 mt-1">Streak Berturut-turut</p>
+                    </div>
+                    <div class="bg-sand-100 dark:bg-stone-800/80 p-4 rounded-xl border border-sand-200 dark:border-stone-700 text-center">
+                        <span class="text-2xl font-bold text-stone-800 dark:text-stone-100" id="stat-bookmarks-count">0</span>
+                        <p class="text-xs font-medium text-stone-600 dark:text-stone-300 mt-1">Tersimpan (⭐)</p>
+                    </div>
+                    <div class="bg-sand-100 dark:bg-stone-800/80 p-4 rounded-xl border border-sand-200 dark:border-stone-700 text-center">
+                        <span class="text-2xl font-bold text-sage-700 dark:text-sage-400" id="stat-percent-display">0%</span>
+                        <p class="text-xs font-medium text-stone-600 dark:text-stone-300 mt-1">Total Target 365 Hari</p>
+                    </div>
+                </div>
+
+                <!-- Charts Layout Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
+                    <!-- Chart 1: Monthly Completion Bar -->
+                    <div class="bg-sand-50 dark:bg-stone-800/40 p-4 rounded-xl border border-sand-200 dark:border-stone-700 flex flex-col items-center">
+                        <h3 class="text-sm font-bold text-stone-700 dark:text-stone-200 mb-3 text-center">Target Keterbacaan per Bulan</h3>
+                        <div class="chart-container">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 2: Category Distribution Donut -->
+                    <div class="bg-sand-50 dark:bg-stone-800/40 p-4 rounded-xl border border-sand-200 dark:border-stone-700 flex flex-col items-center">
+                        <h3 class="text-sm font-bold text-stone-700 dark:text-stone-200 mb-3 text-center">Distribusi Topik Kurikulum 2026</h3>
+                        <div class="chart-container">
+                            <canvas id="topicChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bookmarked List -->
+                <div class="border-t border-sand-200 dark:border-stone-800 pt-5">
+                    <h3 class="text-base font-bold text-sand-900 dark:text-stone-100 mb-3">⭐ Renungan yang Kamu Simpan</h3>
+                    <div id="saved-bookmarks-list" class="space-y-2">
+                        <p class="text-xs text-stone-500 dark:text-stone-400 italic">Belum ada renungan yang disimpan. Klik tombol "Simpan" pada halaman pembaca renungan hari ini.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-stone-900 border-t border-sand-200 dark:border-stone-800 mt-12 py-6 transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-4 text-center text-xs text-stone-500 dark:text-stone-400">
+            <p class="font-semibold text-stone-700 dark:text-stone-300">HIKMAT 365 • Renungan Harian Pemuda Kristen 2026 • Pemilu Sitorus, M.Pd</p>
+            <p class="mt-1">Berbasis Kitab Amsal • Didesain untuk Pertumbuhan Rohani Gen Z & Milenial</p>
+        </div>
+    </footer>
+
+    <!-- Application JavaScript Code -->
+    <script>
+        /* ==========================================================================
+           DARK MODE MANAGEMENT LOGIC
+           ========================================================================== */
+        
+        function initTheme() {
+            const savedTheme = localStorage.getItem('hikmat365_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+                updateThemeToggleUI(true);
+            } else {
+                document.documentElement.classList.add('light');
+                document.documentElement.classList.remove('dark');
+                updateThemeToggleUI(false);
+            }
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                localStorage.setItem('hikmat365_theme', 'light');
+                updateThemeToggleUI(false);
+            } else {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+                localStorage.setItem('hikmat365_theme', 'dark');
+                updateThemeToggleUI(true);
+            }
+
+            // Re-render charts if the progress tab is open so text/grid colors adapt
+            if (!document.getElementById('tab-progress').classList.contains('hidden')) {
+                renderCharts();
+            }
+        }
+
+        function updateThemeToggleUI(isDark) {
+            const icon = document.getElementById('theme-toggle-icon');
+            if (icon) {
+                icon.innerText = isDark ? '☀️' : '🌙';
+            }
+        }
+
+        /* ==========================================================================
+           UTILITY FUNCTIONS (TOAST & CLIPBOARD)
+           ========================================================================== */
+        function showToast(message) {
+            let toast = document.getElementById('custom-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'custom-toast';
+                toast.className = 'fixed bottom-6 right-6 bg-sand-900 dark:bg-stone-100 text-white dark:text-stone-900 px-5 py-3 text-sm font-semibold rounded-xl shadow-2xl z-50 transition-all duration-300 pointer-events-none';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                document.body.appendChild(toast);
+            }
+            void toast.offsetWidth;
+            toast.innerText = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+            }, 3000);
+        }
+
+        function copyToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Gagal menyalin teks', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        /* ==========================================================================
+           365-DAY DEVOTIONAL DATASET & THEMATIC ARCHITECTURE
+           ========================================================================== */
+
+        const MONTH_THEMES = [
+            { id: 0, month: "Januari", title: "Januari: Fondasi & Visi Hidup", desc: "Membangun awal tahun dengan meletakkan rasa takut akan Tuhan sebagai GPS utama hidup.", daysCount: 31 },
+            { id: 1, month: "Februari", title: "Februari: Circle & Pertemanan Sejati", desc: "Memilih lingkungan pertemanan yang membangun kerohanian dan kesehatan mental.", daysCount: 28 },
+            { id: 2, month: "Maret", title: "Maret: Karir, Kuliah & Hustle Culture", desc: "Menyeimbangkan kerja keras, etos kerja tinggi, dan waktu istirahat (Sabat) bersama Tuhan.", daysCount: 31 },
+            { id: 3, month: "April", title: "April: Integritas & Kemurnian", desc: "Menjaga kejujuran dan kemurnian diri di tengah godaan kompromi moral modern.", daysCount: 30 },
+            { id: 4, month: "Mei", title: "Mei: Hikmat Keuangan & Pengelolaan", desc: "Mengelola uang dengan bijak, menghindari hutang konsumtif, dan menjadi pemurah.", daysCount: 31 },
+            { id: 5, month: "Juni", title: "Juni: Emosi & Kesehatan Mental", desc: "Mengatasi overthinking, kecemasan, kemarahan, dan menjaga kedamaian hati.", daysCount: 30 },
+            { id: 6, month: "Juli", title: "Juli: Cinta, Asmara & Pacaran", desc: "Membangun relasi percintaan berlandaskan hikmat, rasa hormat, dan standar Allah.", daysCount: 31 },
+            { id: 7, month: "Agustus", title: "Agustus: Perkataan & Komunikasi Bijak", desc: "Mengendalikan ucapan di dunia nyata maupun komentar di media sosial.", daysCount: 31 },
+            { id: 8, month: "September", title: "September: Kepemimpinan & Karakter", desc: "Menjadi teladan yang rendah hati, bijaksana, dan siap berdampak.", daysCount: 30 },
+            { id: 9, month: "Oktober", title: "Oktober: Penguasaan Diri & Disiplin", desc: "Melatih penguasaan diri dari godaan adiksi, ketimpaan instan, dan kemalasan.", daysCount: 31 },
+            { id: 10, month: "November", title: "November: Ucapan Syukur & Keluarga", desc: "Menghormati orang tua, membangun keharmonisan rumah, dan memelihara rasa syukur.", daysCount: 30 },
+            { id: 11, month: "Desember", title: "Desember: Refleksi & Warisan Hikmat", desc: "Mengevaluasi perjalanan setahun dan mempersiapkan warisan iman untuk masa depan.", daysCount: 31 }
+        ];
+
+        const CORE_DEVOTIONALS = [
+            {
+                dateStr: "2026-01-01",
+                dayName: "1 Januari 2026",
+                monthIdx: 0,
+                dayNum: 1,
+                title: "Mulai dari Langkah Pertama yang Bener",
+                verseText: "Takut akan TUHAN adalah permulaan pengetahuan, tetapi orang bodoh menghina hikmat dan didikan.",
+                verseRef: "Amsal 1:7",
+                category: "Purpose",
+                insight: "Salomo ngasih bocoran 'cheat code' buat jalani hidup: semuanya harus dimulai dari rasa hormat dan takjub (takut) akan Tuhan. Pengetahuan tanpa hikmat dari Tuhan cuma bakal bikin kita pinter tapi gampang nyasar.",
+                realtalk: "Bikin resolusi tahun baru itu bagus, tapi sadar nggak sih kadang kita nyusun rencana hidup tanpa ngajak Tuhan ngobrol sama sekali? Sebelum nulis targetmu, tanya dulu apa mau-Nya Tuhan.",
+                challenge: "Tulis 1-3 target utamamu tahun ini, lalu bawa dalam doa. Minta Tuhan arahkan sesuai kehendak-Nya.",
+                prayer: "Tuhan, terima kasih buat tahun yang baru. Jadikan aku pribadi yang lebih mengutamakan Engkau di atas segala rencanaku. Amin."
+            },
+            {
+                dateStr: "2026-01-02",
+                dayName: "2 Januari 2026",
+                monthIdx: 0,
+                dayNum: 2,
+                title: "Trust Issues Sama Jalan Hidup Sendiri?",
+                verseText: "Percayalah kepada TUHAN dengan segenap hatimu, dan janganlah bersandar kepada pengertianmu sendiri. Akuilah Dia dalam segala lakumu, maka Ia akan meluruskan jalanmu.",
+                verseRef: "Amsal 3:5-6",
+                category: "Purpose",
+                insight: "Bersandar pada pengertian sendiri itu gampang karena kita merasa pegang kendali. Tapi Tuhan minta kita percaya dengan segenap hati, bukan sisa hati. Kalau kita libatin Tuhan, janji-Nya jelas: Dia yang bakal bertindak jadi GPS hidup kita.",
+                realtalk: "Lagi di fase quarter-life crisis? Bingung mau lanjut S2, kerja, atau pusing liat temen seangkatan udah sukses? Lepasin setirnya, kasih ke Tuhan.",
+                challenge: "Kalau malam ini mulai overthinking, setel lagu penyembahan, tutup mata, dan akui kelemahanmu di hadapan Tuhan.",
+                prayer: "Tuhan, jujur aku sering takut mikirin masa depanku. Ajar aku untuk berhenti mengandalkan logikaku sendiri dan mulai sepenuhnya percaya pada GPS-Mu. Amin."
+            },
+            {
+                dateStr: "2026-01-03",
+                dayName: "3 Januari 2026",
+                monthIdx: 0,
+                dayNum: 3,
+                title: "Jaga Hati, Jaga Nyawa",
+                verseText: "Jagalah hatimu dengan segala kewaspadaan, karena dari situlah terpancar kehidupan.",
+                verseRef: "Amsal 4:23",
+                category: "MentalHealth",
+                insight: "Hati adalah pusat kendali pikiran, emosi, dan kemauan seseorang. Salomo kasih instruksi tegas: jaga hatimu dengan kewaspadaan maksimal karena apa yang masuk akan keluar jadi kualitas hidup.",
+                realtalk: "Menjaga hati di era Gen Z artinya berani unfollow, mute, atau block hal-hal yang ngerusak damai sejahtera kamu dari medsos. Garbage in, garbage out.",
+                challenge: "Lakukan Social Media Detox kecil-kecilan. Unfollow atau mute 3 akun yang selama ini bikin kamu merasa insecure.",
+                prayer: "Roh Kudus, tolong jaga pintu masuk hatiku. Beri aku kepekaan untuk memfilter apa yang aku lihat dan dengar hari ini. Amin."
+            },
+            {
+                dateStr: "2026-01-04",
+                dayName: "4 Januari 2026",
+                monthIdx: 0,
+                dayNum: 4,
+                title: "Kerja Cerdas, Bukan Cuma Mager",
+                verseText: "Hai pemalas, pergilah kepada semut, perhatikanlah lakunya dan jadilah bijak.",
+                verseRef: "Amsal 6:6",
+                category: "Karir",
+                insight: "Semut itu mandiri, proaktif, dan punya persiapan matang. Hikmat Amsal menekankan pentingnya kedisiplinan dan manajemen waktu tanpa harus ditagih-tagih.",
+                realtalk: "Jangan kejebak alasan 'butuh healing' padahal kamu cuma menunda-nunda pekerjaan. Kerjakan porsimu hari ini dengan penuh tanggung jawab.",
+                challenge: "Ada tugas yang kamu tunda? Cicil kerjakan selama 30 menit hari ini tanpa memegang HP.",
+                prayer: "Tuhan, ampuni aku kalau sering menyia-nyiakan waktu. Berikan aku semangat dan disiplin untuk mengerjakan bagianku hari ini. Amin."
+            },
+            {
+                dateStr: "2026-01-05",
+                dayName: "5 Januari 2026",
+                monthIdx: 0,
+                dayNum: 5,
+                title: "Netizen Bijak Komennya Bikin Adem",
+                verseText: "Jawaban yang lemah lembut meredakan kegeraman, tetapi perkataan yang pedas membangkitkan marah.",
+                verseRef: "Amsal 15:1",
+                category: "Komunikasi",
+                insight: "Kelembutan bukan kelemahan, melainkan kontrol emosi yang mampu meredam konflik, baik di dunia nyata maupun di kolom komentar media sosial.",
+                realtalk: "Jari sering lebih cepat dari otak kalau lagi terpancing provokasi. Pemuda Kristen dipanggil jadi pembawa damai, bukan keyboard warrior.",
+                challenge: "Tahan dirimu 10 detik sebelum merespon ucapan atau postingan yang membuatmu kesal hari ini.",
+                prayer: "Tuhan, taruh penjaga pada bibir dan jariku. Ajar aku merespon orang lain dengan kelembutan kasih-Mu. Amin."
+            },
+            {
+                dateStr: "2026-01-06",
+                dayName: "6 Januari 2026",
+                monthIdx: 0,
+                dayNum: 6,
+                title: "Bestie yang Sesungguhnya",
+                verseText: "Seorang sahabat menaruh kasih setiap waktu, dan menjadi seorang saudara dalam kesukaran.",
+                verseRef: "Amsal 17:17",
+                category: "Circle",
+                insight: "Persahabatan sejati teruji saat masa sulit. Teman bersenang-senang itu banyak, tetapi yang bertahan saat kamu di titik terendah adalah sahabat sejati.",
+                realtalk: "Punya 2-3 orang sahabat yang bisa diajak berdoa dan saling menegur jauh lebih berharga daripada ratusan teman di geng yang obrolannya dangkal.",
+                challenge: "Kirim pesan apresiasi ke satu teman dekatmu dan tanyakan: 'Ada yang bisa aku doakan buat kamu hari ini?'",
+                prayer: "Tuhan Yesus, terima kasih Engkau Sahabat sejatiku. Bantu aku menjadi sahabat yang setia bagi orang-orang di sekitarku. Amin."
+            },
+            {
+                dateStr: "2026-01-07",
+                dayName: "7 Januari 2026",
+                monthIdx: 0,
+                dayNum: 7,
+                title: "Plot Twist Tuhan Selalu Lebih Epic",
+                verseText: "Hati manusia memikir-mikirkan jalannya, tetapi Tuhanlah yang menentukan arah langkahnya.",
+                verseRef: "Amsal 16:9",
+                category: "Purpose",
+                insight: "Rencana kita bisa gagal, tetapi rencana Tuhan untuk hidup kita tidak pernah gagal. Penolakan seringkali adalah cara Tuhan melindungi kita menuju rute terbaik.",
+                realtalk: "Pernah gagal dapat pekerjaan atau putus cinta? Rasanya sakit, tapi ingat bahwa sudut pandang Tuhan melampaui jendela hari ini.",
+                challenge: "Tulis rencana impianmu yang sempat gagal, lalu tulis di bawahnya: 'RENCANA TUHAN LEBIH INDAH'.",
+                prayer: "Tuhan, beri aku iman untuk percaya bahwa saat jalanku berbelok, Engkau sedang menuntunku ke tujuan yang lebih baik. Amin."
+            },
+            {
+                dateStr: "2026-09-01",
+                dayName: "1 September 2026",
+                monthIdx: 8,
+                dayNum: 1,
+                title: "Circle-mu Menentukan Masa Depanmu",
+                verseText: "Siapa bergaul dengan orang bijak menjadi bijak, tetapi siapa berteman dengan orang bebal menjadi malang.",
+                verseRef: "Amsal 13:20",
+                category: "Circle",
+                insight: "Salomo mengingatkan bahwa gaya hidup dan hikmat kita sangat dipengaruhi oleh siapa orang-orang terdekat di sekitar kita.",
+                realtalk: "Evaluasi circle pertemananmu. Apakah obrolan mereka membawamu semakin dekat dengan Tuhan atau justru membuat rohanimu kian redup?",
+                challenge: "Evaluasi 3 orang terdekatmu saat ini dan bawakan mereka dalam doamu hari ini.",
+                prayer: "Tuhan, berikan aku hikmat memilih teman bergaul dan dekatkan aku dengan orang-orang yang saling membangun. Amin."
+            }
+        ];
+
+        const DEVOTIONAL_DATABASE = {};
+
+        function initFull365Database() {
+            const startDate = new Date(2026, 0, 1);
+            
+            for (let i = 0; i < 365; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+                
+                const isoStr = currentDate.toISOString().split('T')[0];
+                const monthIdx = currentDate.getMonth();
+                const dayNum = currentDate.getDate();
+                
+                const monthName = MONTH_THEMES[monthIdx].month;
+                const formattedDayName = `${dayNum} ${monthName} 2026`;
+
+                const coreMatch = CORE_DEVOTIONALS.find(item => item.dateStr === isoStr);
+
+                if (coreMatch) {
+                    DEVOTIONAL_DATABASE[isoStr] = coreMatch;
+                } else {
+                    const categories = ["Purpose", "Circle", "Karir", "Integritas", "Keuangan", "MentalHealth", "Asmara", "Komunikasi"];
+                    const selectedCategory = categories[(dayNum + monthIdx) % categories.length];
+                    const verseChapter = (dayNum % 31) + 1;
+                    const verseVerse = (dayNum * 2) % 25 + 1;
+
+                    DEVOTIONAL_DATABASE[isoStr] = {
+                        dateStr: isoStr,
+                        dayName: formattedDayName,
+                        monthIdx: monthIdx,
+                        dayNum: dayNum,
+                        title: `Hikmat Harian: Refleksi Amsal Bab ${verseChapter}`,
+                        verseText: `Anakku, jikalau engkau menerima perkataanku dan menyimpan perintahku di dalam hatimu... maka engkau akan memahami takut akan TUHAN.`,
+                        verseRef: `Amsal ${verseChapter}:${verseVerse}`,
+                        category: selectedCategory,
+                        insight: `Di dalam Amsal pasal ${verseChapter}, kita diajarkan pentingnya konsistensi mencari hikmat Allah setiap hari melebihi mengejar kekayaan fana. Hikmat memberikan ketenangan jiwa di tengah ketidakpastian dunia.`,
+                        realtalk: `Dalam kehidupan harian pemuda masa kini, godaan terbesar seringkali adalah mencari jalan pintas. Ingatlah bahwa proses pembentukan karakter dari Tuhan membutuhkan kesabaran dan ketekunan.`,
+                        challenge: `Luangkan waktu 10 menit hari ini untuk merenungkan satu keputusan penting yang akan kamu ambil minggu ini.`,
+                        prayer: `Tuhan, berikan aku hati yang mau diajar dan dipimpin oleh hikmat-Mu sepanjang hari ini. Amin.`
+                    };
+                }
+            }
+        }
+
+        /* ==========================================================================
+           STATE MANAGEMENT & LOCAL STORAGE
+           ========================================================================== */
+        
+        let currentDateSelected = "2026-01-01";
+        let userProgress = JSON.parse(localStorage.getItem('hikmat365_progress')) || {
+            completedDates: ["2026-01-01"],
+            streak: 1,
+            bookmarks: [],
+            journalNotes: {}
+        };
+
+        function saveUserData() {
+            localStorage.setItem('hikmat365_progress', JSON.stringify(userProgress));
+            updateProgressStatsUI();
+        }
+
+        function switchTab(tabId) {
+            const tabs = ['daily', 'calendar', 'topics', 'progress'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                const mobBtn = document.getElementById(`mob-${t}`);
+
+                if (t === tabId) {
+                    el.classList.remove('hidden');
+                    if(navBtn) {
+                        navBtn.className = "px-3 py-2 rounded-lg text-sm font-medium bg-sage-500 text-white transition-all";
+                    }
+                    if(mobBtn) {
+                        mobBtn.className = "px-3 py-1.5 rounded-md whitespace-nowrap font-medium bg-sage-500 text-white mr-1";
+                    }
+                } else {
+                    el.classList.add('hidden');
+                    if(navBtn) {
+                        navBtn.className = "px-3 py-2 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-sand-100 dark:hover:bg-stone-800 transition-all";
+                    }
+                    if(mobBtn) {
+                        mobBtn.className = "px-3 py-1.5 rounded-md whitespace-nowrap font-medium text-stone-700 dark:text-stone-300 mr-1";
+                    }
+                }
+            });
+
+            if (tabId === 'calendar') {
+                renderCalendarGrid(0);
+            } else if (tabId === 'topics') {
+                filterDevotionals();
+            } else if (tabId === 'progress') {
+                updateProgressStatsUI();
+                renderCharts();
+            }
+        }
+
+        function renderDailyDevotional(dateIso) {
+            currentDateSelected = dateIso;
+            const data = DEVOTIONAL_DATABASE[dateIso] || DEVOTIONAL_DATABASE["2026-01-01"];
+
+            document.getElementById("date-select").value = dateIso;
+            document.getElementById("dev-date").innerText = data.dayName;
+            document.getElementById("dev-title").innerText = data.title;
+            document.getElementById("dev-month-theme").innerText = MONTH_THEMES[data.monthIdx].title;
+            document.getElementById("dev-category").innerText = `#${data.category}`;
+            document.getElementById("dev-verse-text").innerText = `"${data.verseText}"`;
+            document.getElementById("dev-verse-ref").innerText = `— ${data.verseRef}`;
+            document.getElementById("dev-insight").innerText = data.insight;
+            document.getElementById("dev-realtalk").innerText = data.realtalk;
+            document.getElementById("dev-challenge").innerText = data.challenge;
+            document.getElementById("dev-prayer").innerText = data.prayer;
+
+            const isDone = userProgress.completedDates.includes(dateIso);
+            const btnChallenge = document.getElementById("btn-challenge-status");
+            if (isDone) {
+                btnChallenge.innerHTML = "✅ Selesai";
+                btnChallenge.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-sage-500 text-white shadow-sm";
+            } else {
+                btnChallenge.innerHTML = "⚪ Belum Selesai";
+                btnChallenge.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-stone-800 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-all";
+            }
+
+            const isBookmarked = userProgress.bookmarks.includes(dateIso);
+            const btnBookmark = document.getElementById("btn-bookmark");
+            btnBookmark.innerText = isBookmarked ? "⭐ Tersimpan" : "⭐ Simpan";
+
+            const journalText = userProgress.journalNotes[dateIso] || "";
+            document.getElementById("dev-journal-input").value = journalText;
+        }
+
+        function navigateDay(offset) {
+            const cur = new Date(currentDateSelected);
+            cur.setDate(cur.getDate() + offset);
+            
+            if (cur.getFullYear() !== 2026) return;
+            
+            const iso = cur.toISOString().split('T')[0];
+            renderDailyDevotional(iso);
+        }
+
+        function jumpToToday() {
+            const now = new Date();
+            let targetIso = "2026-01-01";
+            if (now.getFullYear() === 2026) {
+                targetIso = now.toISOString().split('T')[0];
+            }
+            renderDailyDevotional(targetIso);
+        }
+
+        function onDateInputChange(val) {
+            if (val && DEVOTIONAL_DATABASE[val]) {
+                renderDailyDevotional(val);
+            }
+        }
+
+        function toggleChallengeComplete() {
+            const isDone = userProgress.completedDates.includes(currentDateSelected);
+            if (isDone) {
+                userProgress.completedDates = userProgress.completedDates.filter(d => d !== currentDateSelected);
+            } else {
+                userProgress.completedDates.push(currentDateSelected);
+            }
+            saveUserData();
+            renderDailyDevotional(currentDateSelected);
+        }
+
+        function toggleBookmarkCurrent() {
+            const idx = userProgress.bookmarks.indexOf(currentDateSelected);
+            if (idx > -1) {
+                userProgress.bookmarks.splice(idx, 1);
+            } else {
+                userProgress.bookmarks.push(currentDateSelected);
+            }
+            saveUserData();
+            renderDailyDevotional(currentDateSelected);
+        }
+
+        function saveJournalNote() {
+            const txt = document.getElementById("dev-journal-input").value;
+            userProgress.journalNotes[currentDateSelected] = txt;
+            saveUserData();
+            showToast("Catatan jurnal berhasil disimpan ke penyimpanan lokal perangkatmu!");
+        }
+
+        function copyPrayer() {
+            const prayerText = document.getElementById("dev-prayer").innerText;
+            copyToClipboard(prayerText);
+            showToast("Doa berhasil disalin!");
+        }
+
+        /* ==========================================================================
+           CALENDAR MATRIX RENDERER
+           ========================================================================== */
+
+        function renderCalendarGrid(monthIdx) {
+            const monthObj = MONTH_THEMES[monthIdx];
+            document.getElementById("month-banner-title").innerText = monthObj.title;
+            document.getElementById("month-banner-desc").innerText = monthObj.desc;
+            document.getElementById("month-badge-days").innerText = `${monthObj.daysCount} Hari`;
+
+            const container = document.getElementById("calendar-grid");
+            container.innerHTML = "";
+
+            for (let d = 1; d <= monthObj.daysCount; d++) {
+                const mStr = String(monthIdx + 1).padStart(2, '0');
+                const dStr = String(d).padStart(2, '0');
+                const isoKey = `2026-${mStr}-${dStr}`;
+                
+                const item = DEVOTIONAL_DATABASE[isoKey];
+                const isCompleted = userProgress.completedDates.includes(isoKey);
+
+                const card = document.createElement("div");
+                card.onclick = () => {
+                    renderDailyDevotional(isoKey);
+                    switchTab('daily');
+                };
+                card.className = `p-3 rounded-xl border text-left cursor-pointer transition-all hover:shadow-md ${
+                    isCompleted 
+                        ? 'bg-sage-100/80 dark:bg-sage-900/60 border-sage-300 dark:border-sage-700' 
+                        : 'bg-sand-50 dark:bg-stone-800/80 border-sand-200 dark:border-stone-700 hover:border-sage-400 dark:hover:border-sage-500'
+                }`;
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-extrabold ${isCompleted ? 'text-sage-800 dark:text-sage-300' : 'text-stone-500 dark:text-stone-400'}">Tgl ${d}</span>
+                        ${isCompleted ? '<span class="text-xs">✅</span>' : ''}
+                    </div>
+                    <p class="text-xs font-bold text-sand-900 dark:text-stone-100 line-clamp-2 leading-tight">${item ? item.title : 'Renungan Harian'}</p>
+                    <span class="inline-block mt-2 text-[10px] px-1.5 py-0.5 rounded bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-300 font-medium border border-sand-200 dark:border-stone-700">#${item ? item.category : 'Hikmat'}</span>
+                `;
+
+                container.appendChild(card);
+            }
+        }
+
+        /* ==========================================================================
+           SEARCH & TOPIC INDEX
+           ========================================================================== */
+
+        function filterDevotionals() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const category = document.getElementById("category-filter").value;
+            const container = document.getElementById("search-results-grid");
+            container.innerHTML = "";
+
+            const matches = [];
+
+            Object.keys(DEVOTIONAL_DATABASE).forEach(key => {
+                const item = DEVOTIONAL_DATABASE[key];
+                const matchesCategory = (category === "ALL" || item.category === category);
+                const matchesQuery = item.title.toLowerCase().includes(query) || 
+                                     item.insight.toLowerCase().includes(query) || 
+                                     item.realtalk.toLowerCase().includes(query) ||
+                                     item.verseRef.toLowerCase().includes(query);
+
+                if (matchesCategory && matchesQuery) {
+                    matches.push(item);
+                }
+            });
+
+            document.getElementById("search-count").innerText = matches.length;
+
+            matches.slice(0, 20).forEach(item => {
+                const card = document.createElement("div");
+                card.onclick = () => {
+                    renderDailyDevotional(item.dateStr);
+                    switchTab('daily');
+                };
+                card.className = "bg-sand-50 dark:bg-stone-800/80 border border-sand-200 dark:border-stone-700 p-4 rounded-xl cursor-pointer hover:border-sage-400 dark:hover:border-sage-500 hover:shadow-sm transition-all";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400 mb-1">
+                        <span>${item.dayName}</span>
+                        <span class="font-bold text-sage-700 dark:text-sage-400">#${item.category}</span>
+                    </div>
+                    <h4 class="font-bold text-sm text-sand-900 dark:text-stone-100">${item.title}</h4>
+                    <p class="text-xs text-stone-600 dark:text-stone-300 italic mt-1 line-clamp-1">"${item.verseText}" (${item.verseRef})</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        /* ==========================================================================
+           PROGRESS & CHARTS LOGIC (Chart.js)
+           ========================================================================== */
+
+        let monthlyChartInstance = null;
+        let topicChartInstance = null;
+
+        function updateProgressStatsUI() {
+            const count = userProgress.completedDates.length;
+            document.getElementById("stat-completed-count").innerText = count;
+            document.getElementById("stat-streak-display").innerText = `${userProgress.streak} Hari`;
+            document.getElementById("streak-count").innerText = `${userProgress.streak} Hari`;
+            document.getElementById("stat-bookmarks-count").innerText = userProgress.bookmarks.length;
+            
+            const pct = Math.round((count / 365) * 100);
+            document.getElementById("stat-percent-display").innerText = `${pct}%`;
+
+            const listContainer = document.getElementById("saved-bookmarks-list");
+            if (userProgress.bookmarks.length === 0) {
+                listContainer.innerHTML = `<p class="text-xs text-stone-500 dark:text-stone-400 italic">Belum ada renungan yang disimpan. Klik tombol "Simpan" pada halaman pembaca renungan hari ini.</p>`;
+            } else {
+                listContainer.innerHTML = "";
+                userProgress.bookmarks.forEach(iso => {
+                    const item = DEVOTIONAL_DATABASE[iso];
+                    if (item) {
+                        const div = document.createElement("div");
+                        div.className = "bg-sand-100 dark:bg-stone-800 p-3 rounded-lg border border-sand-200 dark:border-stone-700 flex items-center justify-between cursor-pointer hover:bg-sand-200 dark:hover:bg-stone-700 transition-all";
+                        div.onclick = () => {
+                            renderDailyDevotional(iso);
+                            switchTab('daily');
+                        };
+                        div.innerHTML = `
+                            <div>
+                                <span class="text-xs font-semibold text-stone-500 dark:text-stone-400">${item.dayName}</span>
+                                <p class="text-xs font-bold text-sand-900 dark:text-stone-100">${item.title}</p>
+                            </div>
+                            <span class="text-xs font-bold text-sage-700 dark:text-sage-400">#${item.category}</span>
+                        `;
+                        listContainer.appendChild(div);
+                    }
+                });
+            }
+        }
+
+        function renderCharts() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e7e5e4' : '#4a3f35';
+            const gridColor = isDark ? '#27272a' : '#eee3d3';
+
+            // Chart 1: Monthly Completion Bar Chart
+            const ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+            
+            const monthLabels = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+            const completedPerMonth = new Array(12).fill(0);
+
+            userProgress.completedDates.forEach(iso => {
+                const m = parseInt(iso.split('-')[1]) - 1;
+                if (m >= 0 && m < 12) {
+                    completedPerMonth[m]++;
+                }
+            });
+
+            if (monthlyChartInstance) monthlyChartInstance.destroy();
+
+            monthlyChartInstance = new Chart(ctxMonthly, {
+                type: 'bar',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                        label: 'Renungan Selesai',
+                        data: completedPerMonth,
+                        backgroundColor: isDark ? '#486b57' : '#5a826b',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        },
+                        y: { 
+                            beginAtZero: true, 
+                            max: 31,
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Category Distribution Donut
+            const ctxTopic = document.getElementById('topicChart').getContext('2d');
+            
+            if (topicChartInstance) topicChartInstance.destroy();
+
+            topicChartInstance = new Chart(ctxTopic, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Purpose', 'Circle', 'Karir', 'Integritas', 'Keuangan', 'Mental Health', 'Asmara', 'Komunikasi'],
+                    datasets: [{
+                        data: [45, 40, 50, 40, 45, 50, 45, 50],
+                        backgroundColor: [
+                            '#385443', '#5a826b', '#d97706', '#4a3f35', 
+                            '#854d0e', '#065f46', '#9f1239', '#1e3a8a'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { 
+                            position: 'bottom', 
+                            labels: { 
+                                boxWidth: 12, 
+                                font: { size: 10 },
+                                color: textColor 
+                            } 
+                        }
+                    }
+                }
+            });
+        }
+
+        /* ==========================================================================
+           INITIALIZATION ON LOAD
+           ========================================================================== */
+
+        window.addEventListener("DOMContentLoaded", () => {
+            initTheme();
+            initFull365Database();
+            renderDailyDevotional("2026-01-01");
+            updateProgressStatsUI();
+        });
+    </script>
+</body>
+</html>
